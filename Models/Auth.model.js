@@ -1,0 +1,18 @@
+// createdAt: {
+//     type: Date,
+//     // `Date.now()` returns the current unix timestamp as a number
+//     default: Date.now
+// }
+
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const AuthSchema = mongoose.Schema({
+  email: { type: Schema.Types.String, required: true },
+  password: { type: Schema.Types.String, required: true },
+  createdAt: { type: Schema.Types.Date, default: Date.now },
+  isAdmin: { type: Schema.Types.Boolean, default: false },
+  role: { type: Schema.Types.Array, required: true },
+});
+
+module.exports = mongoose.model("auth", AuthSchema);
