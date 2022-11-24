@@ -16,6 +16,7 @@ const JWT_SECRET_KEY = "GUVI_LEARNING_FULL_STACK";
 
 //REQUIRING BCRYPT FROM NODE
 const bcrypt = require("bcrypt");
+const { response } = require("../../app");
 
 const getHasedFunction = (password = "", rounds = 5) => {
   return bcrypt.hashSync(password, rounds);
@@ -68,27 +69,126 @@ router.post("/", (req, res, next) => {
     .catch((e) => console.log(e));
 });
 
-module.exports = router;
+// GET
+/*
 
-// const user = new Auth({
-//   email: email,
-//   password: getHasedFunction(password, 10),
-//   isAdmin: isAdmin,
-//   roles: roles,
-// });
-// user
-//   .save()
-//   .then((response) =>
-//     res.status(200).json({
-//       data: response,
-//       message: "User created successfully",
-//       status: 201,
-//     })
-//   )
-//   .catch((e) =>
-//     res.status(200).json({
-//       error: e,
-//       message: "Creating user account process failure",
-//       status: 406,
-//     })
-//   );
+  QUERY-PARAMS:
+  email: test@test.com
+
+*/
+router.post("/checkUser", (req, res, next) => {
+  const { email } = req.body;
+  Auth.find({
+    email: email,
+  })
+    .then((response) => {
+      if (response && response.length > 0) {
+        const userData = {
+          email: response[0].email,
+        };
+        return res.status(200).json({
+          success: true,
+          data: userData,
+          message: "Account exists",
+        });
+      } else {
+        return res.status(200).json({
+          success: false,
+          message: "Account doesn't exists",
+        });
+      }
+    })
+    .catch();
+});
+
+// POST
+// ABILITY TO CHECK WHETHER USER PROVIDED EMAIL IS ALREADY EXISTS
+// IF ACCOUNT DOESNT EXISTS -> SEND RESPONSE -> Account doesnt exists
+// IF ACCOUNT EXISTS -> GET ->
+// NEW PASSWORD -> String -> VARCHAR -> REQUIRED
+// USER EMAIL -> Unique -> VARCHAR -> REQUIRED
+
+router.post("/forgotpassword", (req, res, next) => {
+  const { email = "", password = "" } = req.body;
+  if (password.length < 1) {
+    return res.status(200).json({
+      message: "Password is not valid",
+      success: false,
+    });
+  }
+  try {
+    Auth.updateOne(
+      { email: email },
+      {
+        password: getHasedFunction(password, 10),
+      },
+      (err, docs) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+            message: "Password couldnt be updated!!!",
+          });
+        } else {
+          return res.status(201).json({
+            success: true,
+            message: "Password updated successfully!!!",
+          });
+        }
+      }
+    );
+  } catch (error) {
+    return res.status(400).json({
+      error: error,
+      message: "Password couldnt be updated!!!",
+    });
+  }
+});
+
+router.post("/updateProfile", (req, res, next) => {
+  const {
+    email = "",
+    profile = "",
+    town = "",
+    city = "",
+    dob = "",
+    preferences = [],
+  } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: "No Account found with the given email address",
+    });
+  }
+  try {
+    Auth.updateOne(
+      { email: email },
+      {
+        city: city,
+        profile: profile,
+        town: town,
+        dob: dob,
+        preferences: preferences,
+      }
+    )
+      .then((response) => {
+        return res.status(201).json({
+          success: true,
+          data: response,
+          message: "Profile updated successfully!!!",
+        });
+      })
+      .catch((err) => {
+        return res.status(400).json({
+          error: err,
+          message: "Profile couldnt be updated!!!",
+        });
+      });
+  } catch (error) {
+    return res.status(400).json({
+      error: error,
+      message: "Profile couldnt be updated!!!",
+    });
+  }
+});
+
+module.exports = router;

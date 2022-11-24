@@ -13,6 +13,14 @@ const AuthSchema = mongoose.Schema({
   createdAt: { type: Schema.Types.Date, default: Date.now },
   isAdmin: { type: Schema.Types.Boolean, default: false },
   role: { type: Schema.Types.Array, required: true },
+  profile: {
+    type: Schema.Types.String,
+    required: false,
+  },
+  town: { type: Schema.Types.String, required: false },
+  city: { type: Schema.Types.String, required: false },
+  dob: { type: Schema.Types.Date, required: false },
+  preferences: { type: Schema.Types.Array, required: false },
 });
 
 module.exports = mongoose.model("auth", AuthSchema);
