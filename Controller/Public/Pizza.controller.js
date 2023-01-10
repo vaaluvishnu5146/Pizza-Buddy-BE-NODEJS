@@ -17,7 +17,7 @@ router.get("/", (req, res, next) => {
           .json({ message: "Sorry no data found", status: 200 });
       }
       res.status(200).json({
-        message: "Handling simple GET ORDER request is Successfull",
+        message: "Pizza's fetched successfully",
         status: 200,
         count: result.length,
         data: result,

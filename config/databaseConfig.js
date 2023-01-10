@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  "mongodb+srv://username:password@cluster0.ez75xfb.mongodb.net/pizzabuddy?retryWrites=true&w=majority",
+  "mongodb+srv://xxxxxx:xxxxxxxxxx@2000@cluster0.ez75xfb.xxxxxxxx.net/dbName?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) {

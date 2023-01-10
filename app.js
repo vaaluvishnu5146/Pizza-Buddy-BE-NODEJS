@@ -23,6 +23,7 @@ const PagesController = require("./Controller/Public/Pages.controller");
 const PizzaController = require("./Controller/Public/Pizza.controller");
 const ScanInsightsController = require("./Controller/Public/ScanInsights.controller");
 const TodoController = require("./Controller/Public/Todo.controller");
+const ProductsController = require("./Controller/Public/Products.controller");
 
 //INITIALISING THE APP WITH THE CONTROLLER
 app.use("/products", Productscontroller);
@@ -37,5 +38,6 @@ app.use("/api/pages", PagesController);
 app.use("/api/scaninsights", ScanInsightsController);
 app.use("/api/todo", TodoController);
 app.use("/api/pizza", PizzaController);
+app.use("/api/products", ProductsController);
 
 module.exports = app;
